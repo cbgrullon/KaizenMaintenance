@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="551c4315d5eb46938b7905e9ef1e545a" Name="Diagram1">
+        <EntityTypeShape EntityType="KaizenDBModel.C__MigrationHistory" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="KaizenDBModel.Equipos" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="KaizenDBModel.Marca" Width="1.5" PointX="0.875" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="KaizenDBModel.Modelo" Width="1.5" PointX="3" PointY="8.125" IsExpanded="true" />
+        <AssociationConnector Association="KaizenDBModel.FK_Modelo_Equipo" ManuallyRouted="false" />
+        <AssociationConnector Association="KaizenDBModel.FK_Marca_Modelo" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

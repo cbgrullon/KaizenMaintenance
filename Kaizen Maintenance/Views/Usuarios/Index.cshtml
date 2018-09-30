@@ -1,0 +1,58 @@
+﻿@model  Kaizen_Maintenance.Models.UserSearchViewModel
+<div class="jumbotron">
+    <h2>
+        Usuarios
+    </h2>
+</div>
+@using (Html.BeginForm("Index", "Usuarios", "POST"))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.SearchText, new { @Class = "form-control", style = "max-width:none;" })
+                <span class="input-group-addon  btn btn-default" onclick="document.getElementById('btSubmit').click()">
+                    <i class="glyphicon glyphicon-search"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <input type="submit" hidden id="btSubmit"/>
+}
+<div class="table-responsive">
+    <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Results[0].UserName)
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Posted)
+            {
+                foreach (var item in Model.Results)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayText(item.UserName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Detalles", "Details", new { Id = item.UserId })
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2">
+                        No se encontro el Usuario
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
