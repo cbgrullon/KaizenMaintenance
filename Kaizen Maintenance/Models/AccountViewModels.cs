@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
 namespace Kaizen_Maintenance.Models
@@ -9,7 +10,37 @@ namespace Kaizen_Maintenance.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+    public class ManageRolesViewModel
+    {
+        public string UserId { get; set; }
+        [Required]
+        [Display(Name ="Usuario")]
+        public string UserName { get; set; }
+        [Required]
+        [Display(Name ="Rol del usuario")]
+        public string  SelectedRol { get; set; }
+        public List<Role> Roles { get; set; }
+        public ManageRolesViewModel()
+        {
+            Roles = new List<Role>();
+        }
+    }
+    public class RegisterViewModel
+    {
+        [Required]
+        [Display(Name ="Usuario")]
+        public string UserName { get; set; }
+        [Required]
+        [Display(Name ="Contraseña")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [Required]
+        [Display(Name ="Confirmar Contraseña")]
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Las contraseñas no coinciden.")]
+        public string ConfirmPassword { get; set; }
 
+    }
     public class ExternalLoginListViewModel
     {
         public string ReturnUrl { get; set; }

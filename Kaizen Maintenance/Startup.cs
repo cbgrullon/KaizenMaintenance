@@ -3,14 +3,14 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Owin;
-
+using System;
 [assembly: OwinStartupAttribute(typeof(Kaizen_Maintenance.Startup))]
 namespace Kaizen_Maintenance
 {
     public partial class Startup
     {
         public void Configuration(IAppBuilder app)
-        {
+        {   
             ConfigureAuth(app);
             createRolesandUsers();
         }
@@ -39,19 +39,11 @@ namespace Kaizen_Maintenance
 
                 }
             }
-            if (!roleManager.RoleExists("Manager"))
+            if (!roleManager.RoleExists("user"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
                 role.Name = "Manager";
                 roleManager.Create(role);
-
-            }
-            if (!roleManager.RoleExists("Employee"))
-            {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Employee";
-                roleManager.Create(role);
-
             }
         }
     }

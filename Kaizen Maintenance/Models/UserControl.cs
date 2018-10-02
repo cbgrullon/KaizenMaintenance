@@ -7,11 +7,15 @@ using System.Web;
 
 namespace Kaizen_Maintenance.Models
 {
-    public class UserControl
+    public class UserControl: IDisposable
     {
         private ApplicationDbContext Context;
         private UserManager<ApplicationUser> userManager;
         private RoleManager<IdentityRole> roleManager;
+        public UserControl()
+        {
+            InitializeComponents();
+        }
         private void InitializeComponents()
         {
             Context = new ApplicationDbContext();
@@ -39,10 +43,16 @@ namespace Kaizen_Maintenance.Models
         {
             userManager.ChangePassword(user.UserId, user.Password, NewPassword);
         }
-        public void AddRoleToUser(string Role, User user)
+        public void ChangeUserRole(string UserId, string newRole)
         {
-            userManager.AddToRole(user.UserId, Role);
+            var UserRoles = userManager.GetRoles(UserId).ToArray();
+            userManager.RemoveFromRoles(UserId,UserRoles);
+            userManager.AddToRole(UserId,newRole);
         }
+        //public void AddRoleToUser(string Role, User user)
+        //{
+        //    userManager.AddToRole(user.UserId, Role);
+        //}
         public UserViewModel FindUsersByUserName(string UserName)
         {
             var user = new UserViewModel();
@@ -50,6 +60,26 @@ namespace Kaizen_Maintenance.Models
             user.UserId = userFinded.Id;
             user.UserName = userFinded.UserName;
             return user;
+        }
+        public void ResetUserPassword(User user, string NewPassword)
+        {
+            var token = userManager.GeneratePasswordResetToken(user.UserId);
+            userManager.ResetPassword(user.UserId,token,NewPassword);
+        }
+        public List<Role> GetRoles()
+        {
+            return roleManager.Roles.Select(x => new Role { Id=x.Id,Name=x.Name}).ToList();
+        }
+        public string GetUserRole(string UserId)
+        {
+            return userManager.GetRoles(UserId).FirstOrDefault();
+
+        }
+        public void Dispose()
+        {
+            roleManager.Dispose();
+            userManager.Dispose();
+            Context.Dispose();
         }
     }
 }

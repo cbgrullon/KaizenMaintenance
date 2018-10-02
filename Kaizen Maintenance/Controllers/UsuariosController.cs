@@ -21,18 +21,23 @@ namespace Kaizen_Maintenance.Controllers
         [HttpPost]
         public ActionResult Index(UserSearchViewModel user)
         {
-            var UC = new UserControl();
-            var userFinded=UC.FindUsersByUserName(user.SearchText);
-            user.Posted = true;
-            if(userFinded!=null) user.Results.Add(userFinded);
-            return View(user);
-
+            using (var UC = new UserControl())
+            {
+                var userFinded = UC.FindUsersByUserName(user.SearchText);
+                user.Posted = true;
+                if (userFinded != null) user.Results.Add(userFinded);
+                return View(user);
+            }
         }
         // GET: Usuarios/Details/5
         public ActionResult Details(string id)
         {
+            using (var UC = new UserControl())
+            {
+                var userFinded = UC.FindUserById(id);
 
-            return View();
+                return View(userFinded);
+            }
         }
 
         // GET: Usuarios/Create
@@ -43,40 +48,58 @@ namespace Kaizen_Maintenance.Controllers
 
         // POST: Usuarios/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(RegisterViewModel userVM)
         {
-            try
+            if (ModelState.IsValid)
             {
+                using (var UC = new UserControl())
+                {
+                    var user = new User();
+                    user.UserName = userVM.UserName;
+                    user.Password = userVM.Password;
+                    UC.CreateUser(user);
+                }
                 // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(userVM);
         }
 
+
+
         // GET: Usuarios/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult ManageRoles(string id)
         {
-            return View();
+            using (var UC = new UserControl())
+            {
+                var user = UC.FindUserById(id);
+                if (user != null)
+                {
+                    var vm = new ManageRolesViewModel();
+                    vm.UserName = user.UserName;
+                    vm.UserId = user.UserId;
+                    vm.SelectedRol = UC.GetUserRole(id);
+                    vm.Roles = UC.GetRoles();
+                    return View(vm);
+                }
+                return RedirectToAction("Index");
+            }
         }
 
         // POST: Usuarios/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult ManageRoles(ManageRolesViewModel vm)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                using (var UC = new UserControl())
+                {
+                    UC.ChangeUserRole(vm.UserId,vm.SelectedRol);
+                    return RedirectToAction("Index");
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View(vm);
         }
 
         // GET: Usuarios/Delete/5
