@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Kaizen_Maintenance.Models.Marca>
+
+@{
+    ViewBag.Title = "Marcas";
+}
+<div class="jumbotron text-center">
+    <h2>
+        Marcas Existentes
+    </h2>
+</div>
+<p>
+    @Html.ActionLink("Crear Marca", "Create")
+</p>
+<table class="table table-striped text-center">
+    <tr>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estado)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.IdMarca }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.IdMarca }) 
+        </td>
+    </tr>
+}
+
+</table>

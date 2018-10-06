@@ -45,7 +45,14 @@ namespace Kaizen_Maintenance.Controllers
         {
             return View();
         }
-
+        public ActionResult DisableUser(string Id)
+        {
+            using (var UC = new UserControl())
+            {
+                UC.DisableUser(Id);
+            }
+            return RedirectToAction("Index");
+        }
         // POST: Usuarios/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -95,7 +102,7 @@ namespace Kaizen_Maintenance.Controllers
             {
                 using (var UC = new UserControl())
                 {
-                    UC.ChangeUserRole(vm.UserId,vm.SelectedRol);
+                    UC.ChangeUserRole(vm.UserId, vm.SelectedRol);
                     return RedirectToAction("Index");
                 }
             }
@@ -103,25 +110,34 @@ namespace Kaizen_Maintenance.Controllers
         }
 
         // GET: Usuarios/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult ChangePassword(string id)
         {
-            return View();
+            using (var UC = new UserControl())
+            {
+                var resetPassVm = new ResetPasswordViewModel();
+                var user = UC.FindUserById(id);
+                resetPassVm.UserId = user.UserId;
+                resetPassVm.Usuario = user.UserName;
+                return View(resetPassVm);
+            }
+            
         }
 
-        // POST: Usuarios/Delete/5
+        
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(ResetPasswordViewModel reset)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add delete logic here
-
+                using (var UC = new UserControl())
+                {
+                    var user = UC.FindUserById(reset.UserId);
+                    UC.ResetUserPassword(user,reset.Password);
+                }
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(reset);
         }
     }
 }

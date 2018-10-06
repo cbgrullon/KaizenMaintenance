@@ -29,6 +29,7 @@ namespace Kaizen_Maintenance.Models
             if (userFinded == null) return null;
             user.UserId = userFinded.Id;
             user.UserName = userFinded.UserName;
+            user.Enabled = userManager.GetRoles(Id).Count() > 0 ? true : false;
             user.Roles.AddRange(userFinded.Roles.Select(x => x.RoleId));
             return user;
         }
@@ -38,6 +39,14 @@ namespace Kaizen_Maintenance.Models
             appUser.UserName = user.UserName;
             appUser.Email = "";
             userManager.Create(appUser, user.Password);
+        }
+        public void DisableUser(string UserId)
+        {
+            var roles =userManager.GetRoles(UserId).ToArray();
+            if (roles.Count() > 0)
+            {
+                userManager.RemoveFromRoles(UserId, roles);
+            }
         }
         public void ChangePassword(User user, string NewPassword)
         {
@@ -64,7 +73,7 @@ namespace Kaizen_Maintenance.Models
         public void ResetUserPassword(User user, string NewPassword)
         {
             var token = userManager.GeneratePasswordResetToken(user.UserId);
-            userManager.ResetPassword(user.UserId,token,NewPassword);
+            //userManager.chan(user.UserId,token,NewPassword);
         }
         public List<Role> GetRoles()
         {

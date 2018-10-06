@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace Kaizen_Maintenance.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public ActionResult Index()

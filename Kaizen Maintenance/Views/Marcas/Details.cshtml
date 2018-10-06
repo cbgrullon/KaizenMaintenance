@@ -1,0 +1,67 @@
+﻿@model Kaizen_Maintenance.Models.Marca
+
+@{
+    ViewBag.Title = "Detalles de la Marca";
+}
+
+<div class="jumbotron text-center">
+    <h2>
+        Detalles de la Marca
+    </h2>
+</div>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Adicionado_Por)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Adicionado_Por)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_Adicion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_Adicion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Modificado_Por)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Modificado_Por)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_Modificacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_Modificacion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IdMarca }) |
+    @Html.ActionLink("Volver al listado", "Index")
+</p>

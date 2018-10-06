@@ -11,7 +11,8 @@ namespace Kaizen_Maintenance.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Modelo
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,11 +22,17 @@ namespace Kaizen_Maintenance.Models
         }
     
         public int IdModelo { get; set; }
+        [Display(Name ="Marca")]
         public int IdMarca { get; set; }
+        [Display(Name ="Modelo")]
         public string Descripcion { get; set; }
+        [Display(Name="Adicionado Por")]
         public string Adicionado_Por { get; set; }
+        [Display(Name="Fecha de Adicion")]
         public System.DateTime Fecha_Adicion { get; set; }
+        [Display(Name ="Modificado Por")]
         public string Modificado_Por { get; set; }
+        [Display(Name="Fecha de Modificacion")]
         public System.DateTime Fecha_Modificacion { get; set; }
         public string Estado { get; set; }
     

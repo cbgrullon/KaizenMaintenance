@@ -1,6 +1,6 @@
 ﻿@model Kaizen_Maintenance.Models.User
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalles - "+Model.UserName;
 }
 
 <div class="jumbotron">
@@ -21,6 +21,12 @@
                 <td>
                     @Html.ActionLink("Manejar Roles", "ManageRoles", new { Id = Model.UserId })
                 </td>
+                @if (Model.Enabled)
+                {
+                <td>
+                    @Html.ActionLink("Deshabilitar Usuario", "DisableUser", new { Id = Model.UserId })
+                </td>
+                }
             </tr>
         </tbody>
     </table>

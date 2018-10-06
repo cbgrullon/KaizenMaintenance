@@ -94,6 +94,7 @@ namespace Kaizen_Maintenance.Models
 
     public class ResetPasswordViewModel
     {
+        public string UserId { get; set; }
         [Required]
         [Display(Name = "Usuario")]
         public string Usuario { get; set; }
@@ -108,8 +109,7 @@ namespace Kaizen_Maintenance.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
-        public string Code { get; set; }
+        
     }
 
     public class ForgotPasswordViewModel
