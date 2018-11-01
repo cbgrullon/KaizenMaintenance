@@ -12,25 +12,29 @@ namespace Kaizen_Maintenance.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Modelo
+    public partial class Mantenimiento
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Modelo()
+        public Mantenimiento()
         {
-            this.Equipos = new HashSet<Equipos>();
+            this.DetalleMantenimientos = new HashSet<DetalleMantenimiento>();
         }
     
-        public int IdModelo { get; set; }
-        public int IdMarca { get; set; }
+        public int IdMantenimiento { get; set; }
+        public int IdEquipo { get; set; }
         public string Descripcion { get; set; }
+        public string QueHacer { get; set; }
+        public int IdTiempo { get; set; }
+        public int TiempoPorMantenimiento { get; set; }
+        public string Estado { get; set; }
         public string Adicionado_Por { get; set; }
         public System.DateTime Fecha_Adicion { get; set; }
         public string Modificado_Por { get; set; }
         public System.DateTime Fecha_Modificacion { get; set; }
-        public string Estado { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Equipos> Equipos { get; set; }
-        public virtual Marca Marca { get; set; }
+        public virtual ICollection<DetalleMantenimiento> DetalleMantenimientos { get; set; }
+        public virtual Equipos Equipos { get; set; }
+        public virtual TIempos TIempos { get; set; }
     }
 }

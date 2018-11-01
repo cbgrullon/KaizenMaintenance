@@ -11,6 +11,14 @@
         <EntityTypeShape EntityType="KaizenDBModel.Modelo" Width="1.5" PointX="3" PointY="8.125" IsExpanded="true" />
         <AssociationConnector Association="KaizenDBModel.FK_Modelo_Equipo" ManuallyRouted="false" />
         <AssociationConnector Association="KaizenDBModel.FK_Marca_Modelo" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="KaizenDBModel.DetalleMantenimiento" Width="1.5" PointX="9.75" PointY="7.75" />
+        <EntityTypeShape EntityType="KaizenDBModel.EstadoMantenimiento" Width="1.5" PointX="7.5" PointY="4" />
+        <EntityTypeShape EntityType="KaizenDBModel.Mantenimiento" Width="1.5" PointX="7.5" PointY="6.875" />
+        <EntityTypeShape EntityType="KaizenDBModel.TIempos" Width="1.5" PointX="5.25" PointY="3.875" />
+        <AssociationConnector Association="KaizenDBModel.FK_DetalleMantenimientos_EstadoMantenimiento" />
+        <AssociationConnector Association="KaizenDBModel.FK_DetalleMantenimientos_Mantenimientos" />
+        <AssociationConnector Association="KaizenDBModel.FK_Mantenimientos_Equipo" />
+        <AssociationConnector Association="KaizenDBModel.FK_Mantenimientos_Tiempo" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

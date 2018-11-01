@@ -206,7 +206,13 @@
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>KaizenDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DetalleMantenimiento.cs">
+      <DependentUpon>KaizenDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Equipos.cs">
+      <DependentUpon>KaizenDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EstadoMantenimiento.cs">
       <DependentUpon>KaizenDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
@@ -226,6 +232,9 @@
       <DependentUpon>KaizenDB.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Mantenimiento.cs">
+      <DependentUpon>KaizenDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Marca.cs">
       <DependentUpon>KaizenDB.tt</DependentUpon>
     </Compile>
@@ -233,6 +242,9 @@
       <DependentUpon>KaizenDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\TIempos.cs">
+      <DependentUpon>KaizenDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserControl.cs" />
     <Compile Include="Models\UserSearchViewModel.cs" />

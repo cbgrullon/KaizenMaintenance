@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -16,20 +17,20 @@ namespace Kaizen_Maintenance.Controllers
         private KaizenDBEntities db = new KaizenDBEntities();
 
         // GET: Equipos
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var equipos = db.Equipos.Include(e => e.Modelo);
-            return View(equipos.ToList());
+            return View(await equipos.ToListAsync());
         }
 
         // GET: Equipos/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Equipos equipos = db.Equipos.Find(id);
+            Equipos equipos = await db.Equipos.FindAsync(id);
             if (equipos == null)
             {
                 return HttpNotFound();
@@ -40,7 +41,7 @@ namespace Kaizen_Maintenance.Controllers
         // GET: Equipos/Create
         public ActionResult Create()
         {
-            ViewBag.IdModelo = new SelectList(db.Modelos, "IdModelo", "Descripcion");
+            ViewBag.IdModelo = new SelectList(db.Modelos.Where(x => x.Estado == "A"), "IdModelo", "Descripcion");
             return View();
         }
 
@@ -49,36 +50,34 @@ namespace Kaizen_Maintenance.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Equipos equipos)
+        public async Task<ActionResult> Create([Bind(Include = "IdEquipo,IdModelo,Estado,Serial,No_Activo,Descripcion")] Equipos equipos)
         {
-            equipos.Fecha_Modificacion = DateTime.Now;
-            equipos.Fecha_Adicion = DateTime.Now;
-            equipos.Modificado_Por = User.Identity.Name;
-            equipos.Adicionado_Por = User.Identity.Name;
+            equipos.Adicionado_Por = equipos.Modificado_Por = User.Identity.Name;
+            equipos.Fecha_Adicion = equipos.Fecha_Modificacion = DateTime.Now;
             if (ModelState.IsValid)
             {
                 db.Equipos.Add(equipos);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdModelo = new SelectList(db.Modelos, "IdModelo", "Descripcion", equipos.IdModelo);
+            ViewBag.IdModelo = new SelectList(db.Modelos.Where(x => x.Estado == "A"), "IdModelo", "Descripcion", equipos.IdModelo);
             return View(equipos);
         }
 
         // GET: Equipos/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Equipos equipos = db.Equipos.Find(id);
+            Equipos equipos = await db.Equipos.FindAsync(id);
             if (equipos == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.IdModelo = new SelectList(db.Modelos, "IdModelo", "Descripcion", equipos.IdModelo);
+            ViewBag.IdModelo = new SelectList(db.Modelos.Where(x => x.Estado == "A"), "IdModelo", "Descripcion", equipos.IdModelo);
             return View(equipos);
         }
 
@@ -87,19 +86,20 @@ namespace Kaizen_Maintenance.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Equipos equipos)
+        public async Task<ActionResult> Edit([Bind(Include = "IdEquipo,IdModelo,Adicionado_Por,Fecha_Adicion,Estado,Serial,No_Activo,Descripcion")] Equipos equipos)
         {
             equipos.Modificado_Por = User.Identity.Name;
             equipos.Fecha_Modificacion = DateTime.Now;
             if (ModelState.IsValid)
             {
                 db.Entry(equipos).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.IdModelo = new SelectList(db.Modelos, "IdModelo", "Descripcion", equipos.IdModelo);
+            ViewBag.IdModelo = new SelectList(db.Modelos.Where(x=>x.Estado=="A"), "IdModelo", "Descripcion", equipos.IdModelo);
             return View(equipos);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

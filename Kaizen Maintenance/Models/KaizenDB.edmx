@@ -15,17 +15,52 @@
           <Property Name="Model" Type="varbinary(max)" Nullable="false" />
           <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
         </EntityType>
+        <EntityType Name="DetalleMantenimientos">
+          <Key>
+            <PropertyRef Name="IdDetMantenimiento" />
+          </Key>
+          <Property Name="IdDetMantenimiento" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdMantenimiento" Type="int" Nullable="false" />
+          <Property Name="Nota" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="IdEstado" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Equipos">
           <Key>
             <PropertyRef Name="IdEquipo" />
           </Key>
           <Property Name="IdEquipo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdModelo" Type="int" Nullable="false" />
+          <Property Name="Serial" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="No_Activo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="Adicionado_Por" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Fecha_Adicion" Type="datetime" Nullable="false" />
           <Property Name="Modificado_Por" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Fecha_Modificacion" Type="datetime" Nullable="false" />
           <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EstadoMantenimientos">
+          <Key>
+            <PropertyRef Name="IdEstado" />
+          </Key>
+          <Property Name="IdEstado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mantenimientos">
+          <Key>
+            <PropertyRef Name="IdMantenimiento" />
+          </Key>
+          <Property Name="IdMantenimiento" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEquipo" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="QueHacer" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="IdTiempo" Type="int" Nullable="false" />
+          <Property Name="TiempoPorMantenimiento" Type="int" Nullable="false" />
+          <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="Adicionado_Por" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Fecha_Adicion" Type="date" Nullable="false" />
+          <Property Name="Modificado_Por" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Fecha_Modificacion" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="Marcas">
           <Key>
@@ -52,6 +87,62 @@
           <Property Name="Fecha_Modificacion" Type="datetime" Nullable="false" />
           <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
+        <EntityType Name="TIempos">
+          <Key>
+            <PropertyRef Name="IdTiempo" />
+          </Key>
+          <Property Name="IdTiempo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="CantidadDias" Type="float" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_DetalleMantenimientos_EstadoMantenimiento">
+          <End Role="EstadoMantenimientos" Type="Self.EstadoMantenimientos" Multiplicity="1" />
+          <End Role="DetalleMantenimientos" Type="Self.DetalleMantenimientos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstadoMantenimientos">
+              <PropertyRef Name="IdEstado" />
+            </Principal>
+            <Dependent Role="DetalleMantenimientos">
+              <PropertyRef Name="IdEstado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetalleMantenimientos_Mantenimientos">
+          <End Role="Mantenimientos" Type="Self.Mantenimientos" Multiplicity="1" />
+          <End Role="DetalleMantenimientos" Type="Self.DetalleMantenimientos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mantenimientos">
+              <PropertyRef Name="IdMantenimiento" />
+            </Principal>
+            <Dependent Role="DetalleMantenimientos">
+              <PropertyRef Name="IdMantenimiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mantenimientos_Equipo">
+          <End Role="Equipos" Type="Self.Equipos" Multiplicity="1" />
+          <End Role="Mantenimientos" Type="Self.Mantenimientos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Equipos">
+              <PropertyRef Name="IdEquipo" />
+            </Principal>
+            <Dependent Role="Mantenimientos">
+              <PropertyRef Name="IdEquipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mantenimientos_Tiempo">
+          <End Role="TIempos" Type="Self.TIempos" Multiplicity="1" />
+          <End Role="Mantenimientos" Type="Self.Mantenimientos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TIempos">
+              <PropertyRef Name="IdTiempo" />
+            </Principal>
+            <Dependent Role="Mantenimientos">
+              <PropertyRef Name="IdTiempo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Marca_Modelo">
           <End Role="Marcas" Type="Self.Marcas" Multiplicity="1" />
           <End Role="Modelos" Type="Self.Modelos" Multiplicity="*" />
@@ -76,11 +167,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GetParameterValue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+          <Parameter Name="ParameterName" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="KaizenDBModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetalleMantenimientos" EntityType="Self.DetalleMantenimientos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Equipos" EntityType="Self.Equipos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EstadoMantenimientos" EntityType="Self.EstadoMantenimientos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mantenimientos" EntityType="Self.Mantenimientos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Marcas" EntityType="Self.Marcas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modelos" EntityType="Self.Modelos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TIempos" EntityType="Self.TIempos" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_DetalleMantenimientos_EstadoMantenimiento" Association="Self.FK_DetalleMantenimientos_EstadoMantenimiento">
+            <End Role="EstadoMantenimientos" EntitySet="EstadoMantenimientos" />
+            <End Role="DetalleMantenimientos" EntitySet="DetalleMantenimientos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetalleMantenimientos_Mantenimientos" Association="Self.FK_DetalleMantenimientos_Mantenimientos">
+            <End Role="Mantenimientos" EntitySet="Mantenimientos" />
+            <End Role="DetalleMantenimientos" EntitySet="DetalleMantenimientos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mantenimientos_Equipo" Association="Self.FK_Mantenimientos_Equipo">
+            <End Role="Equipos" EntitySet="Equipos" />
+            <End Role="Mantenimientos" EntitySet="Mantenimientos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mantenimientos_Tiempo" Association="Self.FK_Mantenimientos_Tiempo">
+            <End Role="TIempos" EntitySet="TIempos" />
+            <End Role="Mantenimientos" EntitySet="Mantenimientos" />
+          </AssociationSet>
           <AssociationSet Name="FK_Marca_Modelo" Association="Self.FK_Marca_Modelo">
             <End Role="Marcas" EntitySet="Marcas" />
             <End Role="Modelos" EntitySet="Modelos" />
@@ -116,6 +230,10 @@
           <Property Name="Fecha_Modificacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Modelo" Relationship="Self.FK_Modelo_Equipo" FromRole="Equipos" ToRole="Modelos" />
+          <Property Name="Serial" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="No_Activo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Mantenimientos" Relationship="KaizenDBModel.FK_Mantenimientos_Equipo" FromRole="Equipos" ToRole="Mantenimiento" />
         </EntityType>
         <EntityType Name="Marca">
           <Key>
@@ -182,7 +300,122 @@
             <End Role="Marcas" EntitySet="Marcas" />
             <End Role="Modelos" EntitySet="Modelos" />
           </AssociationSet>
+          <EntitySet Name="DetalleMantenimientos" EntityType="KaizenDBModel.DetalleMantenimiento" />
+          <EntitySet Name="EstadoMantenimientos" EntityType="KaizenDBModel.EstadoMantenimiento" />
+          <EntitySet Name="Mantenimientos" EntityType="KaizenDBModel.Mantenimiento" />
+          <EntitySet Name="TIempos" EntityType="KaizenDBModel.TIempos" />
+          <AssociationSet Name="FK_DetalleMantenimientos_EstadoMantenimiento" Association="KaizenDBModel.FK_DetalleMantenimientos_EstadoMantenimiento">
+            <End Role="EstadoMantenimiento" EntitySet="EstadoMantenimientos" />
+            <End Role="DetalleMantenimiento" EntitySet="DetalleMantenimientos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetalleMantenimientos_Mantenimientos" Association="KaizenDBModel.FK_DetalleMantenimientos_Mantenimientos">
+            <End Role="Mantenimiento" EntitySet="Mantenimientos" />
+            <End Role="DetalleMantenimiento" EntitySet="DetalleMantenimientos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mantenimientos_Equipo" Association="KaizenDBModel.FK_Mantenimientos_Equipo">
+            <End Role="Equipos" EntitySet="Equipos" />
+            <End Role="Mantenimiento" EntitySet="Mantenimientos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mantenimientos_Tiempo" Association="KaizenDBModel.FK_Mantenimientos_Tiempo">
+            <End Role="TIempos" EntitySet="TIempos" />
+            <End Role="Mantenimiento" EntitySet="Mantenimientos" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="DetalleMantenimiento">
+          <Key>
+            <PropertyRef Name="IdDetMantenimiento" />
+          </Key>
+          <Property Name="IdDetMantenimiento" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdMantenimiento" Type="Int32" Nullable="false" />
+          <Property Name="Nota" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IdEstado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EstadoMantenimiento" Relationship="KaizenDBModel.FK_DetalleMantenimientos_EstadoMantenimiento" FromRole="DetalleMantenimiento" ToRole="EstadoMantenimiento" />
+          <NavigationProperty Name="Mantenimiento" Relationship="KaizenDBModel.FK_DetalleMantenimientos_Mantenimientos" FromRole="DetalleMantenimiento" ToRole="Mantenimiento" />
+        </EntityType>
+        <EntityType Name="EstadoMantenimiento">
+          <Key>
+            <PropertyRef Name="IdEstado" />
+          </Key>
+          <Property Name="IdEstado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DetalleMantenimientos" Relationship="KaizenDBModel.FK_DetalleMantenimientos_EstadoMantenimiento" FromRole="EstadoMantenimiento" ToRole="DetalleMantenimiento" />
+        </EntityType>
+        <EntityType Name="Mantenimiento">
+          <Key>
+            <PropertyRef Name="IdMantenimiento" />
+          </Key>
+          <Property Name="IdMantenimiento" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEquipo" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="QueHacer" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IdTiempo" Type="Int32" Nullable="false" />
+          <Property Name="TiempoPorMantenimiento" Type="Int32" Nullable="false" />
+          <Property Name="Estado" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Adicionado_Por" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Adicion" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Modificado_Por" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Modificacion" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="DetalleMantenimientos" Relationship="KaizenDBModel.FK_DetalleMantenimientos_Mantenimientos" FromRole="Mantenimiento" ToRole="DetalleMantenimiento" />
+          <NavigationProperty Name="Equipos" Relationship="KaizenDBModel.FK_Mantenimientos_Equipo" FromRole="Mantenimiento" ToRole="Equipos" />
+          <NavigationProperty Name="TIempos" Relationship="KaizenDBModel.FK_Mantenimientos_Tiempo" FromRole="Mantenimiento" ToRole="TIempos" />
+        </EntityType>
+        <EntityType Name="TIempos">
+          <Key>
+            <PropertyRef Name="IdTiempo" />
+          </Key>
+          <Property Name="IdTiempo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CantidadDias" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Mantenimientos" Relationship="KaizenDBModel.FK_Mantenimientos_Tiempo" FromRole="TIempos" ToRole="Mantenimiento" />
+        </EntityType>
+        <Association Name="FK_DetalleMantenimientos_EstadoMantenimiento">
+          <End Type="KaizenDBModel.EstadoMantenimiento" Role="EstadoMantenimiento" Multiplicity="1" />
+          <End Type="KaizenDBModel.DetalleMantenimiento" Role="DetalleMantenimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstadoMantenimiento">
+              <PropertyRef Name="IdEstado" />
+            </Principal>
+            <Dependent Role="DetalleMantenimiento">
+              <PropertyRef Name="IdEstado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetalleMantenimientos_Mantenimientos">
+          <End Type="KaizenDBModel.Mantenimiento" Role="Mantenimiento" Multiplicity="1" />
+          <End Type="KaizenDBModel.DetalleMantenimiento" Role="DetalleMantenimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mantenimiento">
+              <PropertyRef Name="IdMantenimiento" />
+            </Principal>
+            <Dependent Role="DetalleMantenimiento">
+              <PropertyRef Name="IdMantenimiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mantenimientos_Equipo">
+          <End Type="KaizenDBModel.Equipos" Role="Equipos" Multiplicity="1" />
+          <End Type="KaizenDBModel.Mantenimiento" Role="Mantenimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Equipos">
+              <PropertyRef Name="IdEquipo" />
+            </Principal>
+            <Dependent Role="Mantenimiento">
+              <PropertyRef Name="IdEquipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mantenimientos_Tiempo">
+          <End Type="KaizenDBModel.TIempos" Role="TIempos" Multiplicity="1" />
+          <End Type="KaizenDBModel.Mantenimiento" Role="Mantenimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TIempos">
+              <PropertyRef Name="IdTiempo" />
+            </Principal>
+            <Dependent Role="Mantenimiento">
+              <PropertyRef Name="IdTiempo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -202,6 +435,9 @@
           <EntitySetMapping Name="Equipos">
             <EntityTypeMapping TypeName="KaizenDBModel.Equipos">
               <MappingFragment StoreEntitySet="Equipos">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="No_Activo" ColumnName="No_Activo" />
+                <ScalarProperty Name="Serial" ColumnName="Serial" />
                 <ScalarProperty Name="IdEquipo" ColumnName="IdEquipo" />
                 <ScalarProperty Name="IdModelo" ColumnName="IdModelo" />
                 <ScalarProperty Name="Adicionado_Por" ColumnName="Adicionado_Por" />
@@ -236,6 +472,50 @@
                 <ScalarProperty Name="Modificado_Por" ColumnName="Modificado_Por" />
                 <ScalarProperty Name="Fecha_Modificacion" ColumnName="Fecha_Modificacion" />
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetalleMantenimientos">
+            <EntityTypeMapping TypeName="KaizenDBModel.DetalleMantenimiento">
+              <MappingFragment StoreEntitySet="DetalleMantenimientos">
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="Nota" ColumnName="Nota" />
+                <ScalarProperty Name="IdMantenimiento" ColumnName="IdMantenimiento" />
+                <ScalarProperty Name="IdDetMantenimiento" ColumnName="IdDetMantenimiento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EstadoMantenimientos">
+            <EntityTypeMapping TypeName="KaizenDBModel.EstadoMantenimiento">
+              <MappingFragment StoreEntitySet="EstadoMantenimientos">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mantenimientos">
+            <EntityTypeMapping TypeName="KaizenDBModel.Mantenimiento">
+              <MappingFragment StoreEntitySet="Mantenimientos">
+                <ScalarProperty Name="Fecha_Modificacion" ColumnName="Fecha_Modificacion" />
+                <ScalarProperty Name="Modificado_Por" ColumnName="Modificado_Por" />
+                <ScalarProperty Name="Fecha_Adicion" ColumnName="Fecha_Adicion" />
+                <ScalarProperty Name="Adicionado_Por" ColumnName="Adicionado_Por" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="TiempoPorMantenimiento" ColumnName="TiempoPorMantenimiento" />
+                <ScalarProperty Name="IdTiempo" ColumnName="IdTiempo" />
+                <ScalarProperty Name="QueHacer" ColumnName="QueHacer" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdEquipo" ColumnName="IdEquipo" />
+                <ScalarProperty Name="IdMantenimiento" ColumnName="IdMantenimiento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TIempos">
+            <EntityTypeMapping TypeName="KaizenDBModel.TIempos">
+              <MappingFragment StoreEntitySet="TIempos">
+                <ScalarProperty Name="CantidadDias" ColumnName="CantidadDias" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdTiempo" ColumnName="IdTiempo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

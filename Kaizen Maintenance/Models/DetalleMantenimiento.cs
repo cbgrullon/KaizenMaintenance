@@ -12,11 +12,14 @@ namespace Kaizen_Maintenance.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class C__MigrationHistory
+    public partial class DetalleMantenimiento
     {
-        public string MigrationId { get; set; }
-        public string ContextKey { get; set; }
-        public byte[] Model { get; set; }
-        public string ProductVersion { get; set; }
+        public int IdDetMantenimiento { get; set; }
+        public int IdMantenimiento { get; set; }
+        public string Nota { get; set; }
+        public int IdEstado { get; set; }
+    
+        public virtual EstadoMantenimiento EstadoMantenimiento { get; set; }
+        public virtual Mantenimiento Mantenimiento { get; set; }
     }
 }

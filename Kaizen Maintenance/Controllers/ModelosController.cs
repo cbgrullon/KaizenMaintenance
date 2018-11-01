@@ -40,7 +40,7 @@ namespace Kaizen_Maintenance.Controllers
         // GET: Modeloes/Create
         public ActionResult Create()
         {
-            ViewBag.IdMarca = new SelectList(db.Marcas, "IdMarca", "Descripcion");
+            ViewBag.IdMarca = new SelectList(db.Marcas.Where(x=>x.Estado=="A"), "IdMarca", "Descripcion");
             return View();
         }
 
@@ -62,7 +62,7 @@ namespace Kaizen_Maintenance.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdMarca = new SelectList(db.Marcas, "IdMarca", "Descripcion", modelo.IdMarca);
+            ViewBag.IdMarca = new SelectList(db.Marcas.Where(x => x.Estado == "A"), "IdMarca", "Descripcion", modelo.IdMarca);
             return View(modelo);
         }
 
@@ -78,7 +78,7 @@ namespace Kaizen_Maintenance.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.IdMarca = new SelectList(db.Marcas, "IdMarca", "Descripcion", modelo.IdMarca);
+            ViewBag.IdMarca = new SelectList(db.Marcas.Where(x => x.Estado == "A"), "IdMarca", "Descripcion", modelo.IdMarca);
             return View(modelo);
         }
 
@@ -97,7 +97,7 @@ namespace Kaizen_Maintenance.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.IdMarca = new SelectList(db.Marcas, "IdMarca", "Descripcion", modelo.IdMarca);
+            ViewBag.IdMarca = new SelectList(db.Marcas.Where(x => x.Estado == "A"), "IdMarca", "Descripcion", modelo.IdMarca);
             return View(modelo);
         }
 

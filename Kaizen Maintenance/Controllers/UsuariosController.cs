@@ -67,6 +67,7 @@ namespace Kaizen_Maintenance.Controllers
                     user.Password = userVM.Password;
                     UC.CreateUser(user);
                 }
+                return RedirectToAction("Index");
                 // TODO: Add insert logic here
             }
             return View(userVM);
