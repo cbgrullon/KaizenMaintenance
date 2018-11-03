@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Kaizen_Maintenance.Models.Mantenimiento>
+
+@{
+    ViewBag.Title = "Mantenimientos";
+}
+
+<div class="jumbotron text-center">
+    <h2>
+        Mantenimientos
+    </h2>
+</div>
+
+<p>
+    @Html.ActionLink("Nuevo Mantenimiento", "Create")
+</p>
+<table class="table table-striped text-center">
+    <tr>
+        <th class="text-center">
+            Marca
+        </th>
+        <th class="text-center">
+            Modelo
+        </th>
+        <th class="text-center">
+            Equipo
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model=>model.IdTiempo)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem=>item.Equipos.Modelo.Marca.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem=>item.Equipos.Modelo.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem=>item.Equipos.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TIempos.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estado)
+        </td>
+        <td>
+            @Html.ActionLink("Modificar", "Edit", new { id = item.IdMantenimiento }) |
+            @Html.ActionLink("Detalles", "Details", new { id = item.IdMantenimiento })
+        </td>
+    </tr>
+}
+
+</table>

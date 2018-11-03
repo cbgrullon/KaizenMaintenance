@@ -1,0 +1,90 @@
+﻿@model Kaizen_Maintenance.Models.Mantenimiento
+
+@{
+    ViewBag.Title = "Detalles del Mantenimiento";
+}
+<div class="jumbotron text-center">
+    <h2>
+        Detalles del Mantenimiento
+    </h2>
+</div>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QueHacer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QueHacer)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Adicionado_Por)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Adicionado_Por)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_Adicion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_Adicion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Modificado_Por)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Modificado_Por)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_Modificacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_Modificacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Equipos.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Equipos.Adicionado_Por)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TIempos.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TIempos.Descripcion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IdMantenimiento }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

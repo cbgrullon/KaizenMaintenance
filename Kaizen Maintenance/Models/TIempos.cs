@@ -11,7 +11,8 @@ namespace Kaizen_Maintenance.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class TIempos
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,7 +22,9 @@ namespace Kaizen_Maintenance.Models
         }
     
         public int IdTiempo { get; set; }
+        [Display(Name="Periodo")]
         public string Descripcion { get; set; }
+        [Display(Name="Cantidad De Dias")]
         public double CantidadDias { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
